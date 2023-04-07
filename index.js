@@ -51,6 +51,38 @@ app.get("/all", (req,res)=>{
     NOTE.find().sort({createdAt:-1}).then(note=>res.json(note)).catch(err=>console.log(err))
 })
 
+app.delete("/delete/:id",async(req,res)=>{
+    const {id} = req.params;
+    const event = await NOTE.findByIdAndDelete(id);
+
+    if(event){
+        res.json({
+            message: "delete sucesssfully"
+        })
+    }
+    else{
+        res.status(400).json({
+            message: "note not found"
+        })
+    }
+})
+
+app.put("/edit/:id",async(req,res)=>{
+    const {id} = req.params;
+    const event = await NOTE.findByIdAndUpdate(id, req.body,{new:true})
+
+    if(event){
+        res.status(200).json({
+            message:"updated sucessfully"
+        })
+    }
+    else{
+        res.status(400).json({
+            message:"there is no note with this id"
+        })
+    }
+})
+
 app.get("/search", async(req,res)=>{
     const searchTerm = req.query.searchTerm;
     const data = await NOTE.find({

@@ -79,7 +79,7 @@ router.post('/login',async(req,res)=>{
             else{
                 res.status(400).json({
                     status:"failed",
-                    message:"invalid credantial !"
+                    message:"invalid credantial!"
                 })
             }
         })
