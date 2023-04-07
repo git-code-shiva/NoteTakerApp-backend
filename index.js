@@ -83,12 +83,24 @@ app.put("/edit/:id",async(req,res)=>{
     }
 })
 
-app.get("/search", async(req,res)=>{
-    const searchTerm = req.query.searchTerm;
-    const data = await NOTE.find({
-        title:{$regex: searchTerm, $option:'i'}
-    }).exec();
-    res.send(data);
+app.get("/note/:id", async(req,res)=>{
+    const {id} = req.params;
+    try{
+        const data = await NOTE.findOne({_id:id});
+    
+    if(data){
+        res.json(data).status(200)
+    }
+    else{
+        res.status(404).json({
+            message: "There is no data with this id"
+        })
+    }
+    } catch(err){
+        res.status(500).json({
+            message:"error retrieving data"
+        })
+    }
 })
 
 app.post("/verifying", (req,res,next)=>{
